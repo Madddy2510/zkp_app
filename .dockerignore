@@ -1,0 +1,17 @@
+# Ignore compiled output
+target/
+
+# Git files
+.git/
+.gitignore
+
+# Local and editor files
+*.log
+*.swp
+.DS_Store
+
+# Documentation and build files
+README.md
+Dockerfile
+docker-compose.yml
+

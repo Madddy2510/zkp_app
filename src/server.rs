@@ -3,7 +3,7 @@ use std::{collections::HashMap, sync::Mutex};
 use num_bigint::BigUint;
 use tonic::{transport::Server, Code, Request, Response, Status};
 
-use zkp_chaum_pedersen::ZKP;
+use zkp_app::ZKP;
 
 pub mod zkp_auth {
     include!("./zkp_auth.rs");
@@ -155,9 +155,10 @@ impl Auth for AuthImpl {
 
 #[tokio::main]
 async fn main() {
-    let addr = "127.0.0.1:50051".to_string();
+    // ✅ FIX: Bind to all network interfaces so the client container can reach it
+    let addr = "0.0.0.0:50051".to_string();
 
-    println!("✅ Running the server in {}", addr);
+    println!("✅ Running the server on {}", addr);
 
     let auth_impl = AuthImpl::default();
 
@@ -167,3 +168,4 @@ async fn main() {
         .await
         .unwrap();
 }
+

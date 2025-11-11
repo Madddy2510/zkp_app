@@ -9,7 +9,7 @@ use zkp_auth::{
     auth_client::AuthClient, AuthenticationAnswerRequest, AuthenticationChallengeRequest,
     RegisterRequest,
 };
-use zkp_chaum_pedersen::ZKP;
+use zkp_app::ZKP;
 
 #[tokio::main]
 async fn main() {
@@ -22,7 +22,8 @@ async fn main() {
         q: q.clone(),
     };
 
-    let mut client = AuthClient::connect("http://127.0.0.1:50051")
+    // ✅ FIX: connect to the server using the Docker Compose service name
+    let mut client = AuthClient::connect("http://zkp_server:50051")
         .await
         .expect("could not connect to the server");
     println!("✅ Connected to the server");
@@ -37,7 +38,7 @@ async fn main() {
     println!("Please provide the password:");
     stdin()
         .read_line(&mut buf)
-        .expect("Could not get the username from stdin");
+        .expect("Could not get the password from stdin");
     let password = BigUint::from_bytes_be(buf.trim().as_bytes());
     buf.clear();
 
@@ -59,7 +60,7 @@ async fn main() {
     println!("Please provide the password (to login):");
     stdin()
         .read_line(&mut buf)
-        .expect("Could not get the username from stdin");
+        .expect("Could not get the password from stdin");
     let password = BigUint::from_bytes_be(buf.trim().as_bytes());
     buf.clear();
 
@@ -94,5 +95,6 @@ async fn main() {
         .expect("Could not verify authentication in server")
         .into_inner();
 
-    println!("✅Logging successful! session_id: {}", response.session_id);
+    println!("✅ Logging successful! session_id: {}", response.session_id);
 }
+

@@ -1,0 +1,29 @@
+services:
+  zkp_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: zkp_server
+    container_name: zkp_server
+    command: ["/usr/local/bin/zkp_server"]
+    ports:
+      - "8080:8080"
+    networks:
+      - zkp_net
+
+  zkp_client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: zkp_client
+    container_name: zkp_client
+    command: ["/usr/local/bin/zkp_client"]
+    depends_on:
+      - zkp_server
+    networks:
+      - zkp_net
+
+networks:
+  zkp_net:
+    driver: bridge
+
